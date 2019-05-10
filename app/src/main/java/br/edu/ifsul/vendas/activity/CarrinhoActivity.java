@@ -91,6 +91,15 @@ public class CarrinhoActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.alertdialog_sim, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                for(ItemPedido item : AppSetup.carrinho){
+                    DatabaseReference dbRef = database.getReference("vendas/produtos")
+                            .child(item.getProduto().getKey()).child("quantidade");
+                    dbRef.setValue(item.getQuantidade() + item.getProduto().getQuantidade());
+                    Log.d("removido" , item.toString());
+                }
+
+
                 AppSetup.carrinho.clear();
                 AppSetup.cliente = null;
                 finish();

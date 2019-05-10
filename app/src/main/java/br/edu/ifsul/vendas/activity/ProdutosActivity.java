@@ -3,13 +3,17 @@ package br.edu.ifsul.vendas.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -28,7 +32,8 @@ import br.edu.ifsul.vendas.adapter.ProdutosAdapter;
 import br.edu.ifsul.vendas.model.Produto;
 import br.edu.ifsul.vendas.setup.AppSetup;
 
-public class ProdutosActivity extends AppCompatActivity {
+public class ProdutosActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "produtosactivity";
     private ListView lvProdutos;
@@ -36,7 +41,19 @@ public class ProdutosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_produtos);
+        setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         lvProdutos = findViewById(R.id.lv_produtos);
         lvProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -82,6 +99,17 @@ public class ProdutosActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_activity_produtos, menu);
@@ -116,6 +144,31 @@ public class ProdutosActivity extends AppCompatActivity {
                 Toast.makeText(this, "Ler código de barras", Toast.LENGTH_SHORT).show();
                 break;
         }
+
+        return true;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+        switch (menuItem.getItemId()){
+            case R.id.nav_carrinho:
+                if(AppSetup.carrinho.isEmpty()){
+                    Toast.makeText(this, "O Carrinho está vazio", Toast.LENGTH_SHORT).show();
+                } else {
+                    startActivity(new Intent(ProdutosActivity.this, CarrinhoActivity.class));
+                }
+                break;
+            case R.id.nav_clientes:
+                startActivity(new Intent(ProdutosActivity.this, ClientesActivity.class));
+                break;
+
+            case R.id.nav_sobre:
+                startActivity(new Intent(ProdutosActivity.this, sobreActivity.class));
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
 
         return true;
     }
