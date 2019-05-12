@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +31,7 @@ import java.util.List;
 
 import br.edu.ifsul.vendas.R;
 import br.edu.ifsul.vendas.adapter.ProdutosAdapter;
+import br.edu.ifsul.vendas.barcode.BarcodeCaptureActivity;
 import br.edu.ifsul.vendas.model.Produto;
 import br.edu.ifsul.vendas.setup.AppSetup;
 
@@ -37,6 +40,7 @@ public class ProdutosActivity extends AppCompatActivity
 
     private static final String TAG = "produtosactivity";
     private ListView lvProdutos;
+    private static final int RC_BARCODE_CAPTURE = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +145,11 @@ public class ProdutosActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menuitem_barcode:
-                Toast.makeText(this, "Ler código de barras", Toast.LENGTH_SHORT).show();
+                // lança a activity barcode.
+                Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+                intent.putExtra(BarcodeCaptureActivity.AutoFocus, true); //true liga a funcionalidade autofoco
+                intent.putExtra(BarcodeCaptureActivity.UseFlash, false); //true liga a lanterna (fash)
+                startActivityForResult(intent, RC_BARCODE_CAPTURE);
                 break;
         }
 
@@ -171,5 +179,43 @@ public class ProdutosActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_BARCODE_CAPTURE) {
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
+                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    //Toast.makeText(this, barcode.displayValue, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                    //localiza o produto na lista (ou não)
+                    boolean flag = true;
+                    int position = 0;
+                    for (Produto produto : AppSetup.produtos) {
+                        if (String.valueOf(produto.getCodigoDeBarras()).equals(barcode.displayValue)) {
+                            flag = false;
+                            Intent intent = new Intent(ProdutosActivity.this, ProdutoDetalheActivity.class);
+                            intent.putExtra("position", position);
+                            startActivity(intent);
+                            break;
+                        }
+                        position++;
+                    }
+                    if (flag) {
+//                        Toast.make(findViewById(R.id.container_activity_produtos_), R.string.snack_codigo_barras_nao_cadastrado, Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(this, "Código de barras não cadastrado", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, R.string.barcode_failure, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "No barcode captured, intent data is null");
+                }
+            } else {
+                Toast.makeText(this, String.format(getString(R.string.barcode_error),
+                        CommonStatusCodes.getStatusCodeString(resultCode)), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
