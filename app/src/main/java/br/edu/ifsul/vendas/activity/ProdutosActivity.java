@@ -185,9 +185,10 @@ public class ProdutosActivity extends AppCompatActivity
             case R.id.nav_sair:
                 if(AppSetup.carrinho.isEmpty()){
                     finish();
-                } else {
-
                 }
+                break;
+            case R.id.nav_produto_adminstracao:
+                startActivity(new Intent(ProdutosActivity.this, ProdutoAdminActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

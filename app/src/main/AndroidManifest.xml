@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:screenOrientation = "portrait">
+        <activity android:name=".activity.ProdutoAdminActivity" android:label="Produto Admin"/>
         <activity android:name=".activity.sobreActivity" android:label="Sobre"/>
         <activity android:name=".activity.CarrinhoActivity" android:label="Carrinho"/>
         <activity android:name=".activity.ProdutoDetalheActivity" android:label="Produto detalhe"/>

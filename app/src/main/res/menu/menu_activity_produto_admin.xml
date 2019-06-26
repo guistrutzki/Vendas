@@ -5,5 +5,10 @@
         android:id="@+id/menuitem_barcode_admin"
         android:icon="@drawable/ic_barcode_24"
         app:showAsAction="always"
-        android:title="@string/title_menu_lercodigodebarras" />
+        android:title="Ler código de barras" />
+    <item
+        android:id="@+id/menuitem_limparform_admin"
+        android:icon="@drawable/ic_action_eraser_32"
+        app:showAsAction="never"
+        android:title="Limpar formulário" />
 </menu>
