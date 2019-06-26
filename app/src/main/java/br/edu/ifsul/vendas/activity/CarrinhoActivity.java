@@ -133,7 +133,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     Date timestamp = new Date();
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference dbRef = database.getReference("pedidos");
+                    DatabaseReference dbRef = database.getReference("vendas/pedidos");
 
                     String key = dbRef.push().getKey();
 
@@ -197,12 +197,33 @@ public class CarrinhoActivity extends AppCompatActivity {
     }
 
     // Working ---
-    private void removeItem(int position){
+    private void removeItem(final int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        atualizaEstoque(position);
-        atualizaView();
+        builder.setTitle(R.string.title_confirmar);
+        builder.setMessage("Deseja retirar este produto do carrinho?");
 
-        Toast.makeText(CarrinhoActivity.this, "Produto removido com sucesso", Toast.LENGTH_SHORT).show();
+        builder.setPositiveButton(R.string.alertdialog_sim, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                atualizaEstoque(position);
+                atualizaView();
+                Toast.makeText(CarrinhoActivity.this, "Produto removido com sucesso", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton(R.string.alertdialog_nao, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.show();
+
+
+//
+
     }
 
     // Working ---
