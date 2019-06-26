@@ -59,6 +59,14 @@ public class ProdutosActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        Log.d(TAG, "USER é: " + AppSetup.user.getFuncao());
+
+        if(AppSetup.user.getFuncao().equals("admin")){
+            navigationView.getMenu().findItem(R.id.nav_produto_adminstracao).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_cliente_administracao).setVisible(true);
+        }
+
         lvProdutos = findViewById(R.id.lv_produtos);
         lvProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -173,6 +181,13 @@ public class ProdutosActivity extends AppCompatActivity
 
             case R.id.nav_sobre:
                 startActivity(new Intent(ProdutosActivity.this, sobreActivity.class));
+                break;
+            case R.id.nav_sair:
+                if(AppSetup.carrinho.isEmpty()){
+                    finish();
+                } else {
+
+                }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

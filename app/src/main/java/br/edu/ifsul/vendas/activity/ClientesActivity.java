@@ -42,6 +42,9 @@ public class ClientesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clientes);
 
+//        Back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         lvClientes = findViewById(R.id.lv_clientes);
         lvClientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -141,6 +144,9 @@ public class ClientesActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.menuitem_barcode:
                 Toast.makeText(this, "Ler código de barras", Toast.LENGTH_SHORT).show();
+                break;
+            case android.R.id.home:
+                finish();
                 break;
         }
 

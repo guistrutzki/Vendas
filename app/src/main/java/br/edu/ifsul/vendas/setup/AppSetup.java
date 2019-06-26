@@ -7,6 +7,7 @@ import br.edu.ifsul.vendas.model.Cliente;
 import br.edu.ifsul.vendas.model.ItemPedido;
 import br.edu.ifsul.vendas.model.Produto;
 import br.edu.ifsul.vendas.model.Pedido;
+import br.edu.ifsul.vendas.model.User;
 
 public class AppSetup {
 
@@ -14,4 +15,5 @@ public class AppSetup {
     public static Cliente cliente = null;
     public static List<ItemPedido> carrinho = new ArrayList<>();
     public static Pedido pedido = null;
+    public static User user = null;
 }
