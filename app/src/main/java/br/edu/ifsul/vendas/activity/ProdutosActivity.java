@@ -189,6 +189,9 @@ public class ProdutosActivity extends AppCompatActivity
                 break;
             case R.id.nav_produto_adminstracao:
                 startActivity(new Intent(ProdutosActivity.this, ProdutoAdminActivity.class));
+                break;
+            case R.id.nav_cliente_administracao:
+                startActivity(new Intent(ProdutosActivity.this, ClienteAdminActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

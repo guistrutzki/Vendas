@@ -20,6 +20,7 @@
         <activity android:name=".activity.ProdutoDetalheActivity" android:label="Produto detalhe"/>
         <activity android:name=".activity.ClientesActivity" android:label="Clientes"/>
         <activity android:name=".barcode.BarcodeCaptureActivity" android:label="barcode" />
+        <activity android:name=".activity.ClienteAdminActivity" android:label="Cliente Admin" />
         <activity
             android:name=".activity.ProdutosActivity"
             android:theme="@style/AppTheme.NoActionBar" android:label="Produtos"/>
